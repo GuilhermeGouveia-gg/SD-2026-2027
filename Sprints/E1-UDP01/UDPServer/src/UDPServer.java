@@ -57,7 +57,6 @@ public class UDPServer {
         }
 
         String sequenceText = cleaned.substring(0, separator).trim();
-        String messageText = cleaned.substring(separator + 1).trim();
 
         int sequence;
         try {
