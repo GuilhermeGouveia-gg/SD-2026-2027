@@ -22,6 +22,8 @@ public class UDPClient {
                 mode = "auto";
             }
 
+            // No modo automático, o cliente atribui números consecutivos.
+            // O modo manual permite provocar a desordenação pedida no exercício.
             int nextSequence = 1;
             while (true) {
                 String message;
@@ -79,6 +81,7 @@ public class UDPClient {
                     nextSequence++;
                 }
 
+                // Cada pedido é um único datagrama no formato <N>,<mensagem>.
                 String request = sequence + "," + message.trim();
                 String response = sendMessage(socket, request);
                 printResponse(response);
@@ -121,6 +124,8 @@ public class UDPClient {
         );
         socket.send(request);
 
+        // Como UDP preserva os limites dos datagramas, uma resposta corresponde
+        // a um receive. Se a resposta se perder, o cliente fica à espera.
         byte[] replyBuffer = new byte[BUFFER_SIZE];
         DatagramPacket reply = new DatagramPacket(replyBuffer, replyBuffer.length);
         socket.receive(reply);

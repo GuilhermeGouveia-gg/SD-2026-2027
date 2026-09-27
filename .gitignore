@@ -1,1 +1,3 @@
 .clawdea/REPO_STATE.md
+# Ficheiros Java compilados
+*.class
