@@ -1,0 +1,6 @@
+# Compilação e dados locais de execução/teste.
+**/out/
+**/lider-p*.txt
+**/replica-*-p*.txt
+testes/execucoes/
+**/__pycache__/
