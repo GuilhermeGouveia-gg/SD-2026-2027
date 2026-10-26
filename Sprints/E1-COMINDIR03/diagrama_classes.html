@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diagrama de Classes · COMINDIR03</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --bg: #0e1320;
+      --paper: #151c2b;
+      --paper-card: #1c2538;
+      --ink: #e4e9f3;
+      --muted: #97a2b9;
+      --line: #36425c;
+      --primary: #7fa2ff;
+      --accent: #3fc9b3;
+      --tag: #f0b04c;
+      --f-display: "Familjen Grotesk", system-ui, sans-serif;
+      --f-body: "Source Sans 3", system-ui, sans-serif;
+      --f-mono: "JetBrains Mono", monospace;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--f-body);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px 64px 24px;
+    }
+
+    header {
+      margin-bottom: 28px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 18px;
+    }
+
+    .badge {
+      display: inline-block;
+      font-family: var(--f-mono);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(127, 162, 255, 0.15);
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-family: var(--f-display);
+      font-size: clamp(28px, 4vw, 40px);
+      margin: 0 0 8px 0;
+      letter-spacing: -0.01em;
+    }
+
+    p.subtitle {
+      color: var(--muted);
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 28px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+    }
+
+    .card h2 {
+      font-family: var(--f-display);
+      font-size: 20px;
+      margin-top: 0;
+      margin-bottom: 16px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mermaid {
+      background: var(--paper-card);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      display: flex;
+      justify-content: center;
+    }
+
+    .grid-classes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 18px;
+    }
+
+    .class-card {
+      background: var(--paper-card);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px 18px;
+    }
+
+    .class-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+    }
+
+    .class-name {
+      font-family: var(--f-mono);
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 15px;
+    }
+
+    .class-role {
+      font-family: var(--f-mono);
+      font-size: 11px;
+      color: var(--tag);
+    }
+
+    ul.member-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-family: var(--f-mono);
+      font-size: 12px;
+      color: var(--ink);
+    }
+
+    ul.member-list li {
+      margin-bottom: 4px;
+      display: flex;
+      gap: 6px;
+    }
+
+    .type-ret {
+      color: var(--muted);
+    }
+
+    .footer-note {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 40px;
+      font-family: var(--f-mono);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="badge">Sistemas Distribuídos · Ficha Prática</span>
+      <h1>COMINDIR03 · Diagrama de Classes</h1>
+      <p class="subtitle">Arquitetura de classes Java, tipos de dados e interações nos 4 projetos (rep03-produtor, rep03-lider, rep03-processador, rep03-replica).</p>
+    </header>
+
+    <section class="card">
+      <h2>Diagrama de Relações de Classes (UML)</h2>
+      <div class="mermaid">
+classDiagram
+    direction TB
+
+    class VectorClock {
+        -long[] v
+        +merge(VectorClock other) void
+        +tick(int k) void
+        +get(int k) long
+        +size() int
+        +copy() VectorClock
+        +compare(VectorClock other) Order
+        +toString() String
+        +parse(String s, int n)$ VectorClock
+    }
+
+    class SensorRecord {
+        -long seq
+        -String sensorId
+        -double temperature
+        -String timestamp
+        -long lamport
+        -VectorClock vector
+        +now(seq, sensor, temp, L, V)$ SensorRecord
+        +toLine() String
+        +fromLine(String line, int n)$ SensorRecord
+    }
+
+    class Wire {
+        +double LIMIAR_ALARME = 28.0$
+        +topicIn(int k)$ String
+        +topicData(int k)$ String
+        +in(sensor, temp, L, V)$ String
+        +reg(host, port, record)$ String
+        +inParts(String msg)$ String[]
+        +regParts(String msg)$ String[]
+    }
+
+    class Partitioner {
+        -int n
+        +of(String sensorId) int
+        +count() int
+    }
+
+    class RecordFile {
+        -Path path
+        +append(SensorRecord r) void
+        +last() SensorRecord
+        +lastSeq() long
+        +range(long from, long to) List~SensorRecord~
+    }
+
+    class IpfsPubSub {
+        -String api
+        -HttpClient http
+        +publish(String topic, String message) void
+        +subscribe(String topic, Consumer onMessage) void
+    }
+
+    class Producer {
+        -Partitioner partitioner
+        -IpfsPubSub ps
+        +publish(sensor, temp) int
+        +burst(n, sensors, quente) void
+    }
+
+    class PartitionLeader {
+        -int k
+        -long lastSeq
+        -long lamport
+        -VectorClock vector
+        -RecordFile file
+        -IpfsPubSub ps
+        -Partitioner partitioner
+        +run() void
+        -receive(String message) void
+        -serve(Socket socket) void
+    }
+
+    class AlarmProcessor {
+        -int n
+        -long lp
+        -VectorClock vp
+        -long[] lastSeq
+        -IpfsPubSub ps
+        -Partitioner partitioner
+        +run() void
+        -handle(int k, String message) void
+    }
+
+    class PartitionReplica {
+        -int k
+        -RecordFile file
+        -TreeMap retained
+        -long lastSeq
+        -receive(String message) void
+        -apply(SensorRecord record) void
+        -recoverIfNeeded() void
+    }
+
+    class CausalCheck {
+        -int n
+        -Path folder
+        +run() void
+    }
+
+    SensorRecord *-- VectorClock : contém
+    PartitionLeader --> VectorClock : mantém L e V
+    PartitionLeader --> RecordFile : persiste e restaura
+    PartitionLeader --> SensorRecord : cria e valida
+    PartitionLeader --> IpfsPubSub : pub/sub
+    PartitionLeader --> Wire : protocolos
+
+    AlarmProcessor --> VectorClock : mantém Lp e Vp
+    AlarmProcessor --> IpfsPubSub : escuta data / envia in
+    AlarmProcessor --> SensorRecord : analisa
+    AlarmProcessor --> Wire : protocolos
+    AlarmProcessor --> Partitioner : calcula partição
+
+    Producer --> VectorClock : envia zeros
+    Producer --> IpfsPubSub : publica in
+    Producer --> Partitioner : calcula partição
+
+    PartitionReplica --> RecordFile : persiste
+    PartitionReplica --> SensorRecord : aplica
+
+    CausalCheck --> VectorClock : compara causalidade
+    CausalCheck --> SensorRecord : lê registos
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Destaques de Implementação por Componente</h2>
+      <div class="grid-classes">
+        <div class="class-card">
+          <div class="class-header">
+            <span class="class-name">VectorClock</span>
+            <span class="class-role">Relógio Vetorial</span>
+          </div>
+          <ul class="member-list">
+            <li><span class="type-ret">merge(other):</span> max componente a componente</li>
+            <li><span class="type-ret">tick(k):</span> evento local v[k]++</li>
+            <li><span class="type-ret">compare(other):</span> BEFORE, AFTER, EQUAL, CONCURRENT</li>
+            <li><span class="type-ret">copy():</span> snapshot profundo para concorrência</li>
+          </ul>
+        </div>
+
+        <div class="class-card">
+          <div class="class-header">
+            <span class="class-name">PartitionLeader</span>
+            <span class="class-role">Líder de Partição</span>
+          </div>
+          <ul class="member-list">
+            <li><span class="type-ret">Atómico:</span> Lamport, Vector, seq e append</li>
+            <li><span class="type-ret">Verificação:</span> V[k] == seq obrigatório</li>
+            <li><span class="type-ret">Recuperação:</span> last() restaura estado do log</li>
+            <li><span class="type-ret">Publicação:</span> REG com carimbos completos</li>
+          </ul>
+        </div>
+
+        <div class="class-card">
+          <div class="class-header">
+            <span class="class-name">AlarmProcessor</span>
+            <span class="class-role">Processador Causal</span>
+          </div>
+          <ul class="member-list">
+            <li><span class="type-ret">Subscrição:</span> threads escutam todas as partições</li>
+            <li><span class="type-ret">Lp & Vp:</span> acumulam conhecimento de todos os nós</li>
+            <li><span class="type-ret">Filtro:</span> ignora duplicados e sensores ALARM-*</li>
+            <li><span class="type-ret">Alarme:</span> temp &ge; 28°C &rarr; IN ALARM-sensor</li>
+          </ul>
+        </div>
+
+        <div class="class-card">
+          <div class="class-header">
+            <span class="class-name">CausalCheck</span>
+            <span class="class-role">Verificação & Análise</span>
+          </div>
+          <ul class="member-list">
+            <li><span class="type-ret">Validação:</span> V[k] == seq em todos os ficheiros</li>
+            <li><span class="type-ret">Causalidade:</span> classifica pares inter-partições</li>
+            <li><span class="type-ret">Lamport:</span> valida a &rarr; b &implies; L(a) &lt; L(b)</li>
+            <li><span class="type-ret">Exportação:</span> vista-lamport.txt por (L, k)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      ESTGV · Sistemas Distribuídos 2026-2027 · Sprint E1-COMINDIR03
+    </div>
+  </div>
+
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        darkMode: true,
+        background: '#1c2538',
+        primaryColor: '#2c58cc',
+        primaryTextColor: '#e4e9f3',
+        primaryBorderColor: '#36425c',
+        lineColor: '#7fa2ff',
+        secondaryColor: '#151c2b',
+        tertiaryColor: '#0e1320'
+      }
+    });
+  </script>
+</body>
+</html>
