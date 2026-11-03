@@ -1,0 +1,10 @@
+**/out/
+**/__pycache__/
+lider-p*.txt
+replica-*-p*.txt
+hb-p*.txt
+monitor-*.txt
+falhas.txt
+relatorio-*.txt
+vista-lamport.txt
+latencias-lote.csv
