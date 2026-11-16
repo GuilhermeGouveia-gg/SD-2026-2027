@@ -8,3 +8,9 @@ out/
 **/out/
 .idea/
 **/.idea/
+
+#Diretório do Maven
+target/
+
+master.key
+
