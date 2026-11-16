@@ -1,4 +1,10 @@
 .clawdea/REPO_STATE.md
+
 # Ficheiros Java compilados
 *.class
+
+# Diretórios gerados pelo IDE/compilação
+out/
+**/out/
 .idea/
+**/.idea/
