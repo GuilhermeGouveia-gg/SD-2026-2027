@@ -16,6 +16,8 @@ public class LeaderBot extends ListenerAdapter {
 
     private static final String ADMIN_ROLE_NAME = "admin-arquivo";
     private static final String ARCHIVE_CHANNEL_NAME = "arquivo";
+
+    //força o re-registo dos comandos. Colocar a true quando se fizerem alterações nos comandos.
     private static final boolean FORCE_REGISTER = false;
 
     public static void main(String[] args) {
