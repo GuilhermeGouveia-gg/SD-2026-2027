@@ -2,6 +2,7 @@ package tpf;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -15,6 +16,9 @@ public class LeaderBot extends ListenerAdapter {
 
     private static final String ADMIN_ROLE_NAME = "admin-arquivo";
     private static final String ARCHIVE_CHANNEL_NAME = "arquivo";
+
+    //força o re-registo dos comandos. Colocar a true quando se fizerem alterações nos comandos.
+    private static final boolean FORCE_REGISTER = false;
 
     public static void main(String[] args) {
         // Obter o token de variável de ambiente (critério de segurança)
@@ -40,40 +44,10 @@ public class LeaderBot extends ListenerAdapter {
             String guildId = System.getenv("DISCORD_GUILD_ID");
             if (guildId != null && !guildId.isBlank()) {
                 var guild = jda.getGuildById(guildId);
-                if (guild != null) {
-                    guild.updateCommands().addCommands(
-                            // 1. /registar
-                            Commands.slash("registar", "Regista um texto")
-                                    .addOption(OptionType.STRING, "texto", "Texto a registar", true),
 
-                            // 2. /estado
-                            Commands.slash("estado", "Mostra o estado atual do líder"),
-
-                            // 3. /config r <n> (Usa SubcommandData)
-                            Commands.slash("config", "Configura um parâmetro")
-                                    .addSubcommands(
-                                            new SubcommandData("r", "Configura o parâmetro r")
-                                                    .addOption(OptionType.INTEGER, "n", "Valor de r", true)
-                                    ),
-
-                            // 4. /recuperar <de> <ate>
-                            Commands.slash("recuperar", "Recupera dados entre intervalos")
-                                    .addOption(OptionType.INTEGER, "de", "Índice inicial", true)
-                                    .addOption(OptionType.INTEGER, "ate", "Índice final", true),
-
-                            // 5. /replica-token
-                            Commands.slash("replica-token", "Gera ou gere token de réplica"),
-
-                            // 6. /replica-remover <id> (Mantido como String para aceitar IDs textuais ou numéricos)
-                            Commands.slash("replica-remover", "Remove uma réplica pelo ID")
-                                    .addOption(OptionType.INTEGER, "id", "ID da réplica", true),
-
-                            // 7. /rajada <n> <intervaloms> (Nome em minúsculas exigido pelo Discord)
-                            Commands.slash("rajada", "Envia rajada de mensagens")
-                                    .addOption(OptionType.INTEGER, "n", "Número de mensagens", true)
-                                    .addOption(OptionType.INTEGER, "intervaloms", "Intervalo em ms", true)
-                    ).queue();
-                    System.out.println("Comandos slash registados na guild com sucesso.");
+                if (FORCE_REGISTER) {
+                    System.out.println("Modo de desenvolvimento: Registando/atualizando comandos...");
+                    registaComandos(guild);
                 }
             }
 
@@ -81,6 +55,45 @@ public class LeaderBot extends ListenerAdapter {
             System.err.println("A ligação falhou!");
             e.printStackTrace();
             System.exit(1);
+        }
+    }
+
+    public static void registaComandos(Guild guild)
+    {
+        if (guild != null) {
+            guild.updateCommands().addCommands(
+                    // 1. /registar
+                    Commands.slash("registar", "Regista um texto")
+                            .addOption(OptionType.STRING, "texto", "Texto a registar", true),
+
+                    // 2. /estado
+                    Commands.slash("estado", "Mostra o estado atual do líder"),
+
+                    // 3. /config r <n> (Usa SubcommandData)
+                    Commands.slash("config", "Configura um parâmetro")
+                            .addSubcommands(
+                                    new SubcommandData("r", "Configura o parâmetro r")
+                                            .addOption(OptionType.INTEGER, "n", "Valor de r", true)
+                            ),
+
+                    // 4. /recuperar <de> <ate>
+                    Commands.slash("recuperar", "Recupera dados entre intervalos")
+                            .addOption(OptionType.INTEGER, "de", "Índice inicial", true)
+                            .addOption(OptionType.INTEGER, "ate", "Índice final", true),
+
+                    // 5. /replica-token
+                    Commands.slash("replica-token", "Gera ou gere token de réplica"),
+
+                    // 6. /replica-remover <id> (Mantido como String para aceitar IDs textuais ou numéricos)
+                    Commands.slash("replica-remover", "Remove uma réplica pelo ID")
+                            .addOption(OptionType.INTEGER, "id", "ID da réplica", true),
+
+                    // 7. /rajada <n> <intervaloms> (Nome em minúsculas exigido pelo Discord)
+                    Commands.slash("rajada", "Envia rajada de mensagens")
+                            .addOption(OptionType.INTEGER, "n", "Número de mensagens", true)
+                            .addOption(OptionType.INTEGER, "intervaloms", "Intervalo em ms", true)
+            ).queue();
+            System.out.println("Comandos slash registados na guild com sucesso.");
         }
     }
 
