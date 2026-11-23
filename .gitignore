@@ -14,3 +14,9 @@ target/
 
 master.key
 
+# Dados locais do arquivo Discord (incluem o log em claro)
+registos.log
+eventos-lider.txt
+selados/
+arquivo.lock
+

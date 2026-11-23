@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "request": "launch",
+      "name": "Bot Discord E2-02",
+      "mainClass": "tpf.LeaderBot",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${env:LOCALAPPDATA}/tpf-discord.env"
+    }
+  ]
+}
